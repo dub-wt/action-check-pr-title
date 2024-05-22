@@ -4,7 +4,7 @@ author: "Slashgear_"
 inputs:
   regexp:
     description: "Regexp (as String) to validate the pull request title"
-    required: false
+    required: true
     default: ".+"
   flags:
     description: "Regexp flags of the object."

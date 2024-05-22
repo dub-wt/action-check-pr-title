@@ -45,6 +45,9 @@ const github = __importStar(__nccwpck_require__(7481));
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __nccwpck_require__(8686);
+function parseRegexList(input) {
+    return input.split(/\r|\n/).map((line) => line === null || line === void 0 ? void 0 : line.trim());
+}
 const run = (context) => {
     var _a, _b;
     const { eventName } = context;
@@ -55,13 +58,32 @@ const run = (context) => {
     }
     const pullRequestTitle = (_b = (_a = context === null || context === void 0 ? void 0 : context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) === null || _b === void 0 ? void 0 : _b.title;
     (0, core_1.info)(`Pull Request title: "${pullRequestTitle}"`);
-    const regex = RegExp((0, core_1.getInput)("regexp"), (0, core_1.getInput)("flags"));
+    const regexParam = (0, core_1.getInput)("regexp");
+    const flagsParam = (0, core_1.getInput)("flags");
     const helpMessage = (0, core_1.getInput)("helpMessage");
-    if (!regex.test(pullRequestTitle)) {
-        let message = `Pull Request title "${pullRequestTitle}" failed to pass match regexp - ${regex}
-`;
+    const regexpList = parseRegexList(regexParam);
+    (0, core_1.info)(`regexParam: ${regexParam}`);
+    (0, core_1.info)(`Regex list: ${regexpList.join(", ")}`);
+    let matches = false;
+    for (const item of regexpList) {
+        const regex = RegExp(item, flagsParam);
+        if (regex.test(pullRequestTitle)) {
+            matches = true;
+            break;
+        }
+    }
+    if (!matches) {
+        let message = `Pull Request title "${pullRequestTitle}"`;
+        if (regexpList.length === 1) {
+            message += `fails to match the regex pattern: /${regexpList[0]}/`;
+        }
+        else {
+            message += `fails to match any of the regex patterns: ${regexpList
+                .map((item) => `/${item}/`)
+                .join(", ")}`;
+        }
         if (helpMessage) {
-            message = message.concat(helpMessage);
+            message += `\n${helpMessage}`;
         }
         (0, core_1.setFailed)(message);
     }

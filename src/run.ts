@@ -18,7 +18,7 @@ export const run = (context: Context) => {
 
   info(`Pull Request title: "${pullRequestTitle}"`);
 
-  const regexParam = getInput("regexp", { required: true });
+  const regexParam = getInput("regexp");
   const flagsParam = getInput("flags");
   const helpMessage = getInput("helpMessage");
 
