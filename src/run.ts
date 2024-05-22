@@ -1,6 +1,8 @@
 import { info, setFailed, getInput } from "@actions/core";
 import { Context } from "@actions/github/lib/context";
 
+
+
 export const run = (context: Context) => {
   const { eventName } = context;
   info(`Event name: ${eventName}`);
@@ -14,10 +16,26 @@ export const run = (context: Context) => {
 
   info(`Pull Request title: "${pullRequestTitle}"`);
 
-  const regex = RegExp(getInput("regexp"), getInput("flags"));
+  const regexParam: string | Array<string> = getInput("regexp");
+  const flagsParam = getInput("flags");
   const helpMessage = getInput("helpMessage");
-  if (!regex.test(pullRequestTitle)) {
-    let message = `Pull Request title "${pullRequestTitle}" failed to pass match regexp - ${regex}
+
+  const regexpList = [];
+  regexpList.push(...regexParam);
+
+  let matches = false;
+
+  for (const item of regexpList) {
+    const regex = RegExp(item, flagsParam);
+
+    if (regex.test(pullRequestTitle)) {
+      matches = true;
+      break;
+    }
+  }
+
+  if (!matches) {
+    let message = `Pull Request title "${pullRequestTitle}" failed to pass match any of ${regex} regexps.
 `;
     if (helpMessage) {
       message = message.concat(helpMessage);
