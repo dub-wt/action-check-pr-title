@@ -26,7 +26,7 @@ describe("run", () => {
     core.setFailed = jest.fn();
   });
 
-  it("should pass nicely if title match regexp", () => {
+  it("should pass nicely if title matches regexp", () => {
     mockInputValues(core.getInput, { regexp: "^[a-z ]+$", flags: "i" });
     run({
       eventName: "pull_request",
@@ -36,7 +36,21 @@ describe("run", () => {
         },
       },
     });
-    expect(core.setFailed).not.toBeCalled();
+    expect(core.setFailed).not.toHaveBeenCalled();
+  });
+
+  it("should pass nicely if title matches one of regexps", () => {
+    const regex_params = ["^[a-z ]+$", "^\\d+$"].join("\n");
+    mockInputValues(core.getInput, { regexp: regex_params, flags: "i" });
+    run({
+      eventName: "pull_request",
+      payload: {
+        pull_request: {
+          title: "123", // matches second regexp
+        },
+      },
+    });
+    expect(core.setFailed).not.toHaveBeenCalled();
   });
 
   describe("on failing", () => {
@@ -60,6 +74,22 @@ describe("run", () => {
     it("should fails on regexp matching", () => {
       mockInputValues(core.getInput, { regexp });
       run(context);
+      expect(core.setFailed.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it("should fails if doesn't match any of defined regexps", () => {
+      const regex_params = ["[a-z ]+", "\\d+"].join("\n");
+      const local_context = {
+        ...context,
+        payload: {
+          pull_request: {
+            title: "$$$",
+          },
+        },
+      };
+
+      mockInputValues(core.getInput, { regexp: regex_params });
+      run(local_context);
       expect(core.setFailed.mock.calls[0][0]).toMatchSnapshot();
     });
 

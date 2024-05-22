@@ -1,9 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`run on failing should fails on regexp matching 1`] = `"Pull Request title "This is a pull request title"fails to match the regex pattern: \\d"`;
+exports[`run on failing should fails if doesn't match any of defined regexps 1`] = `"Pull Request title "$$$"fails to match any of the regex patterns: /[a-z ]+/, /\\d+/"`;
+
+exports[`run on failing should fails on regexp matching 1`] = `"Pull Request title "This is a pull request title"fails to match the regex pattern: /\\d/"`;
 
 exports[`run on failing should fails on regexp matching with helper message if defined 1`] = `
-"Pull Request title "This is a pull request title"fails to match the regex pattern: \\d
+"Pull Request title "This is a pull request title"fails to match the regex pattern: /\\d/
 Example of matching titles:
 "[Example] example of title (US-6596)"
 "
