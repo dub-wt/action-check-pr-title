@@ -1,9 +1,15 @@
 name: "Check pull request title"
 description: "Github action to check Pull Request title based on JS Regexp"
-author: "Slashgear_"
+author: "dub-wt"
 inputs:
   regexp:
-    description: "Regexp (as String) to validate the pull request title"
+    description: |-
+      Regexp (as String) to validate the pull request title.
+      Multiple expressiong should be separated by \n (newline).
+      Example:
+      regexp: |- 
+        ^[A-Z].+$
+        ^[0-9].+$
     required: true
     default: ".+"
   flags:
@@ -15,7 +21,7 @@ inputs:
     required: false
     default: ""
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
 branding:
   icon: "type"

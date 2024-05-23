@@ -24,8 +24,7 @@ export const run = (context: Context) => {
 
   const regexpList = parseRegexList(regexParam);
 
-  info(`regexParam: ${regexParam}`);
-  info(`Regex list: ${regexpList.join(", ")}`);
+  info(`Regex patterns: ${regexpList.map((item) => `/${item}/`).join("\n")}`);
 
   let matches = false;
   for (const item of regexpList) {
@@ -33,6 +32,9 @@ export const run = (context: Context) => {
 
     if (regex.test(pullRequestTitle)) {
       matches = true;
+      info(
+        `Pull Request title "${pullRequestTitle}" matches the regex pattern: /${item}/`
+      );
       break;
     }
   }

@@ -62,13 +62,13 @@ const run = (context) => {
     const flagsParam = (0, core_1.getInput)("flags");
     const helpMessage = (0, core_1.getInput)("helpMessage");
     const regexpList = parseRegexList(regexParam);
-    (0, core_1.info)(`regexParam: ${regexParam}`);
-    (0, core_1.info)(`Regex list: ${regexpList.join(", ")}`);
+    (0, core_1.info)(`Regex patterns: ${regexpList.map((item) => `/${item}/`).join("\n")}`);
     let matches = false;
     for (const item of regexpList) {
         const regex = RegExp(item, flagsParam);
         if (regex.test(pullRequestTitle)) {
             matches = true;
+            (0, core_1.info)(`Pull Request title "${pullRequestTitle}" matches the regex pattern: /${item}/`);
             break;
         }
     }

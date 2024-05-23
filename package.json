@@ -18,7 +18,7 @@
     "format-check": "prettier --check --ignore-unknown '**/*'",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest --passWithNoTests",
-    "preversion": "pnpm run build && pnpm run package && git add ."
+    "preversion": "pnpm format-check && pnpm run build && pnpm run package && git add ."
   },
   "dependencies": {
     "@actions/core": "^1.4.0",
