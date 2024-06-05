@@ -1,6 +1,5 @@
 name: "Check pull request title"
 description: "Github action to check Pull Request title based on JS Regexp"
-author: "dub-wt"
 inputs:
   regexp:
     description: |-
