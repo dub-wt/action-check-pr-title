@@ -24,7 +24,8 @@ export const run = (context: Context) => {
 
   const regexpList = parseRegexList(regexParam);
 
-  info(`Regex patterns: ${regexpList.map((item) => `/${item}/`).join("\n")}`);
+  info("Regex patterns:");
+  info(regexpList.map((item) => `  /${item}/`).join("\n"));
 
   let matches = false;
   for (const item of regexpList) {
