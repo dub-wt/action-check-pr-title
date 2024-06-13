@@ -74,15 +74,7 @@ const run = (context) => {
         }
     }
     if (!matches) {
-        let message = `Pull Request title "${pullRequestTitle}"`;
-        if (regexpList.length === 1) {
-            message += `fails to match the regex pattern: /${regexpList[0]}/`;
-        }
-        else {
-            message += `fails to match any of the regex patterns: ${regexpList
-                .map((item) => `/${item}/`)
-                .join(", ")}`;
-        }
+        let message = `Pull Request title fails to match any of the regex patterns.`;
         if (helpMessage) {
             message += `\n${helpMessage}`;
         }
