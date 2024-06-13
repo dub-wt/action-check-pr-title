@@ -62,7 +62,8 @@ const run = (context) => {
     const flagsParam = (0, core_1.getInput)("flags");
     const helpMessage = (0, core_1.getInput)("helpMessage");
     const regexpList = parseRegexList(regexParam);
-    (0, core_1.info)(`Regex patterns: ${regexpList.map((item) => `/${item}/`).join("\n")}`);
+    (0, core_1.info)("Regex patterns:");
+    (0, core_1.info)(regexpList.map((item) => `  /${item}/`).join("\n"));
     let matches = false;
     for (const item of regexpList) {
         const regex = RegExp(item, flagsParam);
